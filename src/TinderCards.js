@@ -13,17 +13,25 @@ function TinderCards() {
   //GOOD (push into an array in REACT)
   //setPeople([...people, 'sonny','qazi']);
   useEffect(() => {
-    database
+
+
+    const unsubscribe = database
     .collection("people")
       .onSnapshot((snapshot) =>
         setPeople(snapshot.docs.map((doc) => doc.data()))
       );
+
+    return () => {
+      //cleanup
+      unsubscribe();
+    }
+
+
+
   }, []);
 
   return (
     <div>
-      <h1>TinderCards</h1>
-
       <div className="tinderCards__cardContainer">
         {people.map((person) => (
           <TinderCard
@@ -36,6 +44,7 @@ function TinderCards() {
               className="card"
             >
               <h3>{person.name}</h3>
+              <h3 className="voiceType">{person.VoiceType}</h3>
             </div>
           </TinderCard>
         ))}
